@@ -15,9 +15,14 @@ services:
       PHPLDAPADMIN_LDAP_CLIENT_TLS: 'true'
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: 'try'
       PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'{{ domain }}': [{'server': [{'tls': True}, {'port': 636}]},{'login': [{'bind_id': 'cn=admin,dc=diesel,dc=net'},{'bind_pass': '{{ admin_password }}'}]}]}]"
-  
     command: >
       --loglevel debug
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.http.services.{{ git_repository }}.loadbalancer.server.port=80
+        - traefik.http.routers.{{ git_repository }}.rule=Host(`{{ domain }}`)
+        - traefik.http.routers.{{ git_repository }}.tls.certresolver=step-ca
     networks:
       - {{ docker_network }}
 
