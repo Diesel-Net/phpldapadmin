@@ -1,0 +1,27 @@
+# docker-compose.yaml
+
+version: '3.8'
+services: 
+
+
+  main:
+    image: osixia//phpldapadmin:0.9.0
+    volumes:
+      - /etc/localtime:/etc/localtime
+      - {{ ssl_cert_dir }}/:/etc/ssl/certs/
+    environment:
+      PHPLDAPADMIN_HTTPS: 'false'
+      PHPLDAPADMIN_TRUST_PROXY_SSL: 'true'
+      PHPLDAPADMIN_LDAP_CLIENT_TLS: 'true'
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: 'try'
+      PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'{{ domain }}': [{'server': [{'tls': True}, {'port': 636}]},{'login': [{'bind_id': 'cn=admin,dc=diesel,dc=net'},{'bind_pass': '{{ admin_password }}'}]}]}]"
+  
+    command: >
+      --loglevel debug
+    networks:
+      - {{ docker_network }}
+
+networks:
+  {{ docker_network }}:
+    external:
+      name: {{ docker_network }}
