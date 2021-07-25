@@ -1,7 +1,7 @@
 ---
 kind: pipeline
 type: docker
-name: Install OpenLDAP Server
+name: Install phpLDAPadmin
 
 clone:
   depth: 1
