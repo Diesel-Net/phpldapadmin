@@ -7,6 +7,7 @@ services:
     image: osixia/phpldapadmin:0.9.0
     volumes:
       - /etc/localtime:/etc/localtime
+      - {{ ssl_cert_dir }}/:/etc/ssl/certs/
       - {{ config_dir }}/certs/:/container/service/ldap-client/assets/certs
     environment:
       PHPLDAPADMIN_HTTPS: 'false'
