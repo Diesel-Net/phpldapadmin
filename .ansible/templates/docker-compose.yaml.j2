@@ -12,8 +12,10 @@ services:
     environment:
       PHPLDAPADMIN_HTTPS: 'false'
       PHPLDAPADMIN_LDAP_CLIENT_TLS: 'true'
-      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: custom_ca.crt
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: try
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: custom_ca.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CRT_FILENAME: custom_ldap.crt
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_KEY_FILENAME: custom_ldap.key
       PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'{{ domain }}': [{'server': [{'tls': True}, {'port': 636}]}, {'login': [{'bind_id': 'cn=admin,dc=diesel,dc=net'}, {'bind_pass': '{{ admin_password }}'}]}, {'auto_number': [{'min': [1000, 500] }]}]}]"
     command: >
       --loglevel debug
