@@ -13,7 +13,7 @@ services:
       PHPLDAPADMIN_LDAP_CLIENT_TLS: 'true'
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
       PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: {{ ssl_cert_filename }}
-      PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'{{ domain }}': [{'server': [{'tls': True}, {'port': 389}]}, {'login': [{'bind_id': 'cn=admin,dc=diesel,dc=net'}, {'bind_pass': '{{ admin_password }}'}]}, {'auto_number': [{'min': [2000, 2000]' }]}]}]"
+      PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'{{ domain }}': [{'server': [{'tls': True}, {'port': 389}]}, {'login': [{'bind_id': 'cn=admin,dc=diesel,dc=net'}, {'bind_pass': '{{ admin_password }}'}]}, {'auto_number': [{'min': [2000, 2000] }]}]}]"
     command: >
       --loglevel debug
     deploy:
