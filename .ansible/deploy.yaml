@@ -2,18 +2,7 @@
 
 - hosts: tools
   strategy: linear
-  roles:
-    - common
-
   tasks:
-
-    - include_role:
-        name: common
-        tasks_from: make_config_dir
-
-    - include_role:
-        name: common
-        tasks_from: make_data_dir
 
     - include_role:
         name: docker

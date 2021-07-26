@@ -1,0 +1,7 @@
+# UID/GID auto increment starting number.
+# we want this relatively high so that we don't clash with other linux accounts on systems
+
+auto_number:
+  min:
+    uid: 2000
+    gid: 2000
