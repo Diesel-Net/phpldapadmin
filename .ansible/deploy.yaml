@@ -11,9 +11,28 @@
         name: common
         tasks_from: make_config_dir
 
-    - include_role:
-        name: common
-        tasks_from: make_data_dir
+    - name: Ensure {{ config_dir }}/certs exists
+      file:
+        state: directory
+        path: '{{ config_dir }}/certs'
+
+    - name: 'Render ca.crt.j2 to {{ config_dir }}/certs/custom_ca.crt'
+      template:
+        src: ca.crt.j2
+        dest: '{{ config_dir }}/certs/custom_ca.crt'
+      become: yes
+
+    - name: 'Render ldap.crt.j2 to {{ config_dir }}/certs/custom_ldap.crt'
+      template:
+        src: ldap.crt.j2
+        dest: '{{ config_dir }}/certs/custom_ldap.crt'
+      become: yes
+
+    - name: 'Render ldap.key.j2 to {{ config_dir }}/certs/custom_ldap.key'
+      template:
+        src: ldap.key.j2
+        dest: '{{ config_dir }}/certs/custom_ldap.key'
+      become: yes
 
     - include_role:
         name: docker
