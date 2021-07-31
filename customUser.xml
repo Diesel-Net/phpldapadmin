@@ -8,7 +8,7 @@
 <invalid>0</invalid>
 <rdn>uid</rdn>
 <!--<regexp>^ou=People,o=.*,</regexp>-->
-<title>Generic: Diesel-Net User Account</title>
+<title>Diesel-Net: User Account</title>
 <visible>1</visible>
 
 <objectClasses>
