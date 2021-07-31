@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE template SYSTEM "template.dtd">
+
+<template>
+<askcontainer>1</askcontainer>
+<description>New Diesel-Net Group</description>
+<icon>ldap-ou.png</icon>
+<invalid>0</invalid>
+<rdn>cn</rdn>
+<!-- <regexp>^ou=.*,</regexp> -->
+<title>Diesel-Net: Group</title>
+<visible>1</visible>
+
+<objectClasses>
+<!-- <objectClass id="posixGroup"></objectClass> -->
+<objectClass id="groupOfUniqueNames"></objectClass>
+</objectClasses>
+
+<attributes>
+<attribute id="cn">
+        <display>Group Name</display>
+        <order>1</order>
+        <page>1</page>
+</attribute>
+<attribute id="description">
+        <display>Description</display>
+        <order>2</order>
+        <page>1</page>
+</attribute>
+<attribute id="owner">
+        <display>Owner</display>
+        <order>3</order>
+        <page>1</page>
+        <value><![CDATA[=php.MultiList(/;(&(objectClass=posixAccount));dn;%cn% (%uid|-12%))]]></value>
+</attribute>
+<attribute id="uniqueMember">
+        <display>Members</display>
+        <order>4</order>
+        <page>1</page>
+        <value><![CDATA[=php.MultiList(/;(&(objectClass=posixAccount));dn;%cn% (%uid|-12%))]]></value>
+</attribute>
+</attributes>
+
+</template>

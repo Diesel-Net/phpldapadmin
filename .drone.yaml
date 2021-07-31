@@ -7,6 +7,27 @@ clone:
   depth: 1
 
 steps:
+
+  - name: docker build & push
+    image: plugins/docker
+    settings:
+      mirror: dockerhub.nexus.diesel.net
+      registry: docker.nexus.diesel.net
+      username:
+        from_secret: nexus_user
+      password:
+        from_secret: nexus_pass
+      repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
+      tags:
+        - ${DRONE_BRANCH}-latest
+    when:
+      branch:
+        - development
+        - stable
+      event:
+        - push
+
+
   - name: configure & deploy (development)
     image: plugins/ansible:3
     environment:

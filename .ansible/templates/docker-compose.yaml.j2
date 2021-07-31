@@ -4,7 +4,7 @@ version: '3.8'
 services: 
 
   main:
-    image: osixia/phpldapadmin:0.9.0
+    image: {{ docker_image }}
     volumes:
       - /etc/localtime:/etc/localtime
       - {{ ssl_cert_dir }}:/container/service/ldap-client/assets/certs
