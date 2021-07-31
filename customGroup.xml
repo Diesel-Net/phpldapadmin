@@ -31,13 +31,13 @@
         <display>Owner</display>
         <order>3</order>
         <page>1</page>
-        <value><![CDATA[=php.MultiList(/;(&(objectClass=posixAccount));dn;%cn% (%uid|-4%))]]></value>
+        <value><![CDATA[=php.MultiList(/;(&(objectClass=posixAccount));dn;%cn% (%uid|-12%))]]></value>
 </attribute>
 <attribute id="uniqueMember">
         <display>Members</display>
         <order>4</order>
         <page>1</page>
-        <value><![CDATA[=php.MultiList(/;(&(objectClass=posixAccount));dn;%cn% (%uid|-4%))]]></value>
+        <value><![CDATA[=php.MultiList(/;(&(objectClass=posixAccount));dn;%cn% (%uid|-12%))]]></value>
 </attribute>
 </attributes>
 
