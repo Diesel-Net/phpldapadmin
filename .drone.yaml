@@ -8,7 +8,7 @@ clone:
 
 steps:
 
-  - name: docker build & push
+  - name: docker build & push (dev)
     image: plugins/docker
     settings:
       mirror: dockerhub.nexus.diesel.net
@@ -23,12 +23,28 @@ steps:
     when:
       branch:
         - development
+      event:
+        - push
+
+  - name: docker build & push (prod)
+    image: plugins/docker
+    settings:
+      mirror: dockerhub.nexus.diesel.net
+      registry: docker.nexus.diesel.net
+      username:
+        from_secret: nexus_user
+      password:
+        from_secret: nexus_pass
+      repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
+      tags:
+        - production-latest
+    when:
+      branch:
         - stable
       event:
         - push
 
-
-  - name: configure & deploy (development)
+  - name: configure & deploy (dev)
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
@@ -46,7 +62,7 @@ steps:
       event:
         - push
 
-  - name: configure & deploy (production)
+  - name: configure & deploy (prod)
     image: plugins/ansible:3
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
