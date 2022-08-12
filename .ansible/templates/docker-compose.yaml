@@ -7,7 +7,7 @@ services:
     image: {{ docker_registry }}/{{ repository }}:{{ version }}-latest
     volumes:
       - /etc/localtime:/etc/localtime
-      - {{ ssl_cert_dir }}:/container/service/ldap-client/assets/certs
+      - /etc/ssl/certs/ca-certificates.crt:/container/service/ldap-client/assets/certs
     environment:
       PHPLDAPADMIN_HTTPS: 'false'
       PHPLDAPADMIN_LDAP_CLIENT_TLS: 'true'
@@ -23,8 +23,8 @@ services:
         - traefik.http.routers.{{ git_repository }}.rule=Host(`{{ domain }}`)
         - traefik.http.routers.{{ git_repository }}.tls.certresolver=step-ca
     networks:
-      - {{ docker_network }}
+      - {{ traefik_network }}
 
 networks:
-  {{ docker_network }}:
+  {{ traefik_network }}:
     external: true
