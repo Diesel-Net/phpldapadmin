@@ -4,7 +4,7 @@ version: '3.8'
 services: 
 
   main:
-    image: {{ docker_registry }}/{{ repository }}:{{ version }}-latest
+    image: {{ docker_image }}
     volumes:
       - /etc/localtime:/etc/localtime
       - /etc/ssl/certs:/container/service/ldap-client/assets/certs
