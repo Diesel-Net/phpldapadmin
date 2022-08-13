@@ -1,7 +1,8 @@
-# ansible-playbook deploy.yaml -i inventories/prod/hosts --vault-id ~/.tokens/master_id
-
-- hosts: tools
+- hosts: swarm_manager
   strategy: linear
+  roles:
+    - traefik
+
   tasks:
 
     - include_role:

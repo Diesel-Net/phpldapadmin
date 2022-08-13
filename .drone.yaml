@@ -1,14 +1,17 @@
 ---
 kind: pipeline
 type: docker
-name: Install phpLDAPadmin
+name: Deploy phpLDAPadmin (dev)
 
 clone:
   depth: 1
 
+concurrency:
+  limit: 1
+
 steps:
 
-  - name: docker build & push (dev)
+  - name: docker build & push
     image: plugins/docker
     settings:
       mirror: dockerhub.nexus.diesel.net
@@ -20,13 +23,42 @@ steps:
       repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
       tags:
         - ${DRONE_BRANCH}-latest
-    when:
-      branch:
-        - development
-      event:
-        - push
 
-  - name: docker build & push (prod)
+
+
+  - name: configure & deploy
+    image: docker.nexus.diesel.net/drone-ansible:2.13
+    environment:
+      ANSIBLE_CONFIG: .ansible/ansible.cfg
+    settings:
+      inventory: .ansible/inventory/dev
+      playbook: .ansible/deploy.yaml
+      galaxy: .ansible/roles/requirements.yaml
+      private_key:
+        from_secret: automation_id_rsa
+      vault_password:
+        from_secret: ansible_vault_password
+
+trigger:
+  branch:
+    - development
+  event:
+    - push
+
+---
+kind: pipeline
+type: docker
+name: Deploy phpLDAPadmin (prod)
+
+clone:
+  depth: 1
+
+concurrency:
+  limit: 1
+
+steps:
+
+  - name: docker build & push
     image: plugins/docker
     settings:
       mirror: dockerhub.nexus.diesel.net
@@ -38,55 +70,26 @@ steps:
       repo: docker.nexus.diesel.net/${DRONE_REPO_NAME}
       tags:
         - production-latest
-    when:
-      branch:
-        - stable
-      event:
-        - push
+        - ${DRONE_TAGE}
 
-  - name: configure & deploy (dev)
-    image: plugins/ansible:3
+
+  - name: configure & deploy
+    image: docker.nexus.diesel.net/drone-ansible:2.13
     environment:
       ANSIBLE_CONFIG: .ansible/ansible.cfg
     settings:
-      inventory: .ansible/inventory/development/hosts
+      inventory: .ansible/inventory/prod
       playbook: .ansible/deploy.yaml
       galaxy: .ansible/roles/requirements.yaml
       private_key:
         from_secret: automation_id_rsa
       vault_password:
         from_secret: ansible_vault_password
-    when:
-      branch:
-        - development
-      event:
-        - push
-
-  - name: configure & deploy (prod)
-    image: plugins/ansible:3
-    environment:
-      ANSIBLE_CONFIG: .ansible/ansible.cfg
-      LDAP_ADMIN_PASSWORD:
-        from_secret: ldap_admin_password
-    settings:
-      playbook: .ansible/deploy.yaml
-      inventory: .ansible/inventory/production/hosts
-      galaxy: .ansible/roles/requirements.yaml
-      private_key:
-        from_secret: automation_id_rsa
-      vault_password:
-        from_secret: ansible_vault_password
-      extra_vars: version=production
-    when:
-      branch:
-        - stable
-      event:
-        - push
 
 trigger:
   branch:
-    - development
     - stable
   event:
     - push
+
 ...

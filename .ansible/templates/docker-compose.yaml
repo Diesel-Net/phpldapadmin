@@ -7,12 +7,12 @@ services:
     image: {{ docker_image }}
     volumes:
       - /etc/localtime:/etc/localtime
-      - {{ ssl_cert_dir }}:/container/service/ldap-client/assets/certs
+      - /etc/ssl/certs:/container/service/ldap-client/assets/certs
     environment:
       PHPLDAPADMIN_HTTPS: 'false'
       PHPLDAPADMIN_LDAP_CLIENT_TLS: 'true'
       PHPLDAPADMIN_LDAP_CLIENT_TLS_REQCERT: demand
-      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: {{ ssl_cert_filename }}
+      PHPLDAPADMIN_LDAP_CLIENT_TLS_CA_CRT_FILENAME: ca-certificates.crt
       PHPLDAPADMIN_LDAP_HOSTS: "#PYTHON2BASH:[{'{{ domain }}': [{'server': [{'tls': True}, {'port': 389}]}, {'login': [{'bind_id': 'cn=admin,dc=diesel,dc=net'}, {'bind_pass': '{{ admin_password }}'}]}, {'auto_number': [{'min': \"array('uidNumber'=>{{auto_number.min.uid}}, 'gidNumber'=>{{auto_number.min.gid}})\"}]}]}]"
     command: >
       --loglevel debug
@@ -23,8 +23,8 @@ services:
         - traefik.http.routers.{{ git_repository }}.rule=Host(`{{ domain }}`)
         - traefik.http.routers.{{ git_repository }}.tls.certresolver=step-ca
     networks:
-      - {{ docker_network }}
+      - {{ traefik_network }}
 
 networks:
-  {{ docker_network }}:
+  {{ traefik_network }}:
     external: true
